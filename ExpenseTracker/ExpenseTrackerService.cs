@@ -249,7 +249,7 @@ namespace ExpenseList
                     Console.WriteLine("Какую новую категорию ввести?");
                     string newCategory = Console.ReadLine();
 
-                    Console.WriteLine("Какую новый комментарий ввести?");
+                    Console.WriteLine("Какой новый комментарий ввести?");
                     string newComment = Console.ReadLine();
 
                     idfound.Amount = newAmount;
