@@ -13,7 +13,9 @@ while (StartProgramm)
     Console.WriteLine("4. Общая статистика");
     Console.WriteLine("5. Сохрание JSON-файла");
     Console.WriteLine("6. Дабавить расход");
-    Console.WriteLine("7. Выход");
+    Console.WriteLine("7. Удалить расход");
+    Console.WriteLine("8. Изменить расход");
+    Console.WriteLine("9. Выход");
     Console.Write("Выберите действие: ");
 
 
@@ -40,6 +42,12 @@ while (StartProgramm)
             tracker.AddExpense();
             break;
         case "7":
+            tracker.DeleteExpense();
+            break;
+        case "8":
+            tracker.UpdateExpense();
+            break;
+        case "9":
             StartProgramm = false;
             Console.WriteLine("Выбрано: Выход из приложения");
             break;

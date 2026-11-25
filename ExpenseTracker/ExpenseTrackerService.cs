@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.Json;
-using System.IO;
 
-namespace ExpenseList 
+namespace ExpenseList
 {
     public class ExpenseTrackerService
     {
@@ -15,10 +15,10 @@ namespace ExpenseList
             //Проверяем, есть ли файл.
             if (File.Exists(_filePath))
             {
-                    //Читаем весь текст из файла
-                    string jsonText = File.ReadAllText(_filePath);
-                    _expenses = JsonSerializer.Deserialize<List<Expense>>(jsonText) ?? new List<Expense>();
-                    Console.WriteLine("Данные успешно загружены из файла.");
+                //Читаем весь текст из файла
+                string jsonText = File.ReadAllText(_filePath);
+                _expenses = JsonSerializer.Deserialize<List<Expense>>(jsonText) ?? new List<Expense>();
+                Console.WriteLine("Данные успешно загружены из файла.");
             }
             else
             {
@@ -27,7 +27,6 @@ namespace ExpenseList
                 _expenses = new List<Expense>();
             }
         }
-
 
         //Методы для поиска расходов: 
         public void ShowAllExpenses()
@@ -52,11 +51,11 @@ namespace ExpenseList
         {
             Console.Write("\nВведите Id расхода для поиска: ");
             string inputId = Console.ReadLine();
-            
+
             if (int.TryParse(inputId, out int searchId))
             {
                 Expense? foundId = null;
-                foreach (var e in _expenses) 
+                foreach (var e in _expenses)
                 {
                     if (e.Id == searchId)
                     {
@@ -126,7 +125,7 @@ namespace ExpenseList
         //--- Просмотр JSON файла --- 
         public void SaveJson()
         {
-            //Просто запомнить,что есть вот такой метод, который раскрываем JSON файл в красивый вид (Encoder заменяет системные символы на кирилицу или латиницу, смотря, что ты записал в этом JSON
+            //Раскрываем JSON файл в красивый вид (Encoder заменяет системные символы на кирилицу или латиницу)
             var options = new JsonSerializerOptions
             {
                 WriteIndented = true,
@@ -158,7 +157,7 @@ namespace ExpenseList
             string comment = Console.ReadLine();
 
             //Вычисляем новый ID. 
-            int newId = _expenses.Count == 0 ? 1 : _expenses.Max(e => e.Id)+1;
+            int newId = _expenses.Count == 0 ? 1 : _expenses.Max(e => e.Id) + 1;
 
             //Создаем новый объект расхода
             Expense newExpense = new Expense
@@ -172,12 +171,103 @@ namespace ExpenseList
 
             //Добавляем расход в список
             _expenses.Add(newExpense);
-         
+
             Console.WriteLine($"Расход '{comment}' на сумму {amount} успешно добавлен!");
 
             //Сразу сохраняем в файл, чтобы пользователь не забыл это сделать
             SaveJson();
         }
+        //--- Удаление расхода из списка ---
+        public void DeleteExpense()
+        {
+            Console.WriteLine("\n--- Удаление расхода ---");
+            Console.Write("Введите Id расхода: ");
+            string idInput = Console.ReadLine();
+
+            if (int.TryParse(idInput, out int searchId))
+            {
+                Expense? idfound = null;
+                foreach (var s in _expenses)
+                {
+                    if (s.Id == searchId)
+                    {
+                        idfound = s;
+                        break;
+                    }
+                }
+                if (idfound != null)
+                {
+                    Console.WriteLine($"\nНайденный расход: {idfound.Id} | {idfound.Amount} | {idfound.Category}");
+                    Console.WriteLine("Удаление...");
+                    Console.WriteLine("Успешно");
+                    _expenses.Remove(idfound);
+                    SaveJson();
+                }
+                else
+                {
+                    Console.WriteLine($"Расход с Id {idInput} - не найден");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Не похоже на число");
+            }
+        }
+        //--- Обновление расхода ---
+        public void UpdateExpense()
+        {
+            Console.WriteLine("\n--- Изменение расхода ---");
+            Console.Write("Введите Id который хотите изменить:");
+            string inputUpdateId = Console.ReadLine();
+
+            if (int.TryParse(inputUpdateId, out int updateId))
+            {
+                Expense? idfound = null;
+                foreach (var i in _expenses)
+                {
+                    if (i.Id == updateId)
+                    {
+                        idfound = i;
+                        break;
+                    }
+                }
+                if (idfound != null)
+                {
+                    Console.WriteLine("\nНайденный расход");
+                    Console.WriteLine($"{"Id",4} | {"Сумма",8} | {"Комментарий",-15}");
+                    Console.WriteLine(new string('-', 50));
+                    Console.WriteLine($"{idfound.Id,4} | {idfound.Amount,8} | {idfound.Comment,-15}");
+
+                    Console.WriteLine("\nКакую новую сумму ввести?");
+                    string newAmountInput = Console.ReadLine();
+                    if (!decimal.TryParse(newAmountInput, out decimal newAmount) || newAmount <= 0)
+                    {
+                        Console.WriteLine("Ошибка: введена некорректная сумма. Изменение отменено.");
+                        return;
+                    }
+
+                    Console.WriteLine("Какую новую категорию ввести?");
+                    string newCategory = Console.ReadLine();
+
+                    Console.WriteLine("Какую новый комментарий ввести?");
+                    string newComment = Console.ReadLine();
+
+                    idfound.Amount = newAmount;
+                    idfound.Category = newCategory;
+                    idfound.Comment = newComment;
+
+                    Console.WriteLine($"Расход успешно обновлён!");
+                    SaveJson();
+                }
+                else
+                {
+                    Console.WriteLine($"Расход с Id {inputUpdateId} - не найден");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Не похоже на Id. Изменение отменено.");
+            }
+        }
     }
 }
-/////
