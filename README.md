@@ -13,14 +13,14 @@ A console-based application for tracking personal expenses with persistent data 
 ## 🛠️ Tech Stack
 
 - **Language**: C# 
-- **Framework**: .NET
+- **Framework**: .NET 10
 - **Libraries**: `System.Text.Json` (for serialization/deserialization), `LINQ` (for data querying)
 - **Version Control**: Git & GitHub
 
 ## 🚀 How to Run
 
 1. Clone the repository or download the source code as a ZIP archive.
-2. Open the solution file (`ExpenseList.sln`) in **Visual Studio**.
+2. Open ExpenseTracker.slnx in **Visual Studio**.
 3. Build the project and run it by pressing `F5` (or `Ctrl + F5` to run without debugging).
 4. Follow the on-screen menu prompts to manage your expenses.
 
