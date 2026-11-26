@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/Solution Items/">
     <File Path="README.md" />
+    <Project Path="xUnit_AddExpense/ExpenseTracker.Test.csproj" Id="ed004e4c-d682-465a-a878-8013c2d03487" />
   </Folder>
   <Project Path="ExpenseTracker/ExpenseTracker.csproj" />
 </Solution>

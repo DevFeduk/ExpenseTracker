@@ -269,6 +269,28 @@ namespace ExpenseList
                 Console.WriteLine("Не похоже на Id. Изменение отменено.");
             }
         }
+        public Expense CreateExpense(decimal amount, string category, string comment)
+        {
+            if (amount <= 0)
+            {
+                throw new ArgumentOutOfRangeException(
+                    nameof(amount),
+                    "Сумма расхода должна быть больше нуля.");
+            }
+
+            int newId = _expenses.Count == 0 ? 1 : _expenses.Max(e => e.Id) + 1;
+
+            var expense = new Expense
+            {
+                Id = newId,
+                Amount = amount,
+                Category = category,
+                Comment = comment,
+                CreatedAt = DateTime.Now
+            };
+
+            _expenses.Add(expense);
+            return expense;
+        }
     }
 }
-/////////
